@@ -1,0 +1,24 @@
+.slots {
+	border: 0.2rem solid #000;
+	width: min-content;
+	margin: 2rem 0;
+}
+
+.slots > div {
+	display: flex;
+}
+
+.slots > div > div {
+	width: 3rem;
+	height: 3rem;
+}
+
+.slots > div > div {
+	background-color: white;
+	border: 0.05rem solid black;
+}
+
+.slots > div > div.highlighted {
+	border: 0.05rem solid red;
+}
+
