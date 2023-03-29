@@ -4,7 +4,7 @@ This workshop project explores the algorithmic complexities of creating briefcas
 
 ![Briefcase Auto Sort](https://asset.vg247.com/RE4-NG%2B-Inventory-2.jpg/BROK/resize/1920x1920%3E/format/jpg/quality/80/RE4-NG%2B-Inventory-2.jpg)
 
-For example, imagine we have a 3x3 inventory. Consider 0 to empty and 1 to used slot:
+For example, imagine we have a 3x3 inventory. Consider 0 a empty slot and 1 already used slot:
 
 ```
 // inventory
@@ -13,16 +13,7 @@ For example, imagine we have a 3x3 inventory. Consider 0 to empty and 1 to used 
 0, 0, 0
 ```
 
-Supose we pickuped 2 itens, one is 2x1 and other 1x1. Supose we and up in this situation:
-
-```
-// inventory
-1, 1, 0
-1, 0, 0
-0, 0, 0
-```
-
-Now we pickuped another item thats is 2x3. But we can't add to our inventory because it won't fit.
+Supose we pickuped 2 itens, one is 2x1 and other 1x1. We end up with something like this
 
 ```
 // inventory
@@ -31,7 +22,16 @@ Now we pickuped another item thats is 2x3. But we can't add to our inventory bec
 0, 0, 0
 ```
 
-The goal of this tool is to check if can rearrange our current inventory disposition of elements to save up space and fit as many itens we can.
+Now we pickuped another item with 2x3 dimentions, but we can't add to our inventory because it won't fit.
+
+```
+// inventory
+1, 1, 0
+1, 0, 0
+0, 0, 0
+```
+
+So the goal of this tool is to check if can rearrange our current inventory disposition of elements to save up space and fit as many itens we can.
 
 ```
 // inventory
