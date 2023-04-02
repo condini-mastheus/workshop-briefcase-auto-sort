@@ -71,8 +71,8 @@ function add(currItem) {
 		throw Error('no item found');
 	}
 
-	/*	this will add a range of 1 ... param / 2
-	*   to generante small itens semi-random width and heights
+	/*	This will only add the begining of the inventory
+	*   change this to place wherever you need
 	*/
 	for (let i = 0; i < currItem.rows; i++) {
 		for (let j = 0; j < currItem.cols; j++) {
