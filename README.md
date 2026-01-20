@@ -1,10 +1,36 @@
 # Briefcase Auto Sort
 
-This workshop project explores the algorithmic complexities of creating briefcase auto sort algorithm.
+This workshop project explores the algorithmic challenges of designing an auto-sort system for a briefcase-style inventory, inspired by grid-based inventories commonly found in games.
+
+The problem focuses on space optimization under strict constraints, where items arrive one-by-one and must be placed intelligently to avoid fragmentation and wasted space.
 
 ![Briefcase Auto Sort](https://asset.vg247.com/RE4-NG%2B-Inventory-2.jpg/BROK/resize/1920x1920%3E/format/jpg/quality/80/RE4-NG%2B-Inventory-2.jpg)
 
-For example, imagine we have a 3x3 inventory. Consider 0 a empty slot and 1 already used slot:
+## Problem Overview
+
+The inventory is represented as a fixed-size 2D grid, where:
+
+- Each cell represents a unit of space
+- Items occupy rectangular regions of the grid
+- Empty slots are represented as 0
+- Occupied slots are represented as 1
+
+### Constraints
+
+- Grid-aligned only: all placements use integer coordinates
+- No rotation: items cannot swap width and height
+- Online problem: items arrive one-by-one, with no knowledge of future items
+- Item size limits:
+  - Maximum width: 4 columns
+  - Maximum height: 3 rows
+
+**Primary objective: Minimize fragmentation while maximizing the chance that future items can still fit**
+
+*Repacking is allowed only to rearrange existing items in order to fit a new one*
+
+### Example
+
+For example, imagine we have a 3x3 inventory. Consider 0 a empty slot and 1 as already used slot:
 
 ```
 // inventory
@@ -31,7 +57,15 @@ Now we pickuped another item with 2x3 dimentions, but we can't add to our invent
 0, 0, 0
 ```
 
-So the goal of this tool is to check if can rearrange our current inventory disposition of elements to save up space and fit as many itens we can.
+### Goal
+
+The goal of this tool is to determine whether the current inventory can be rearranged to:
+
+- Reduce fragmentation
+- Preserve large, contiguous empty regions
+- Allow the new item to fit without violating constraints
+
+For example, a valid rearrangement could be:
 
 ```
 // inventory
@@ -40,6 +74,7 @@ So the goal of this tool is to check if can rearrange our current inventory disp
 0, 0, 0
 ```
 
+This rearrangement creates a contiguous empty region large enough to fit the 2×3 item.
 
 ## Workshop Instructions
 
@@ -50,7 +85,6 @@ So the goal of this tool is to check if can rearrange our current inventory disp
 ## Acknowledgments
 
 The inspiration for this workshop came from a game from my adolescence that was recently remade. In the first version, the development team didn't include the automatic sorting algorithm, but in the new version, they did, and that made me curious to understand how it works.
-
 
 ## License
 
