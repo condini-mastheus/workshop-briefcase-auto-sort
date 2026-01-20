@@ -49,7 +49,7 @@ So the goal of this tool is to check if can rearrange our current inventory disp
 
 ## Acknowledgments
 
-This workshop inspiration came of a teenagerhood game that was recently remade and was included this feature - Resident Evil 4 Remake
+The inspiration for this workshop came from a game from my adolescence that was recently remade. In the first version, the development team didn't include the automatic sorting algorithm, but in the new version, they did, and that made me curious to understand how it works.
 
 
 ## License
