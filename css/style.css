@@ -22,3 +22,7 @@
 	border: 0.05rem solid red;
 }
 
+.slots > div > div.hole {
+	background-color: rgba(255, 0, 0, 0.2);
+}
+

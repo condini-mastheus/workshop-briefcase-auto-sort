@@ -28,6 +28,9 @@ document.addEventListener("DOMContentLoaded",async function ready(){
 	}
 
 	function add() {
-		Inventory.add(currItem)
+		const success = Inventory.add(currItem);
+		if (!success) {
+			console.error("Not enough space in inventory!");
+		}
 	}
 });

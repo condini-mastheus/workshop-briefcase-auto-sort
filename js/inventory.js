@@ -8,23 +8,54 @@ export default {
 
 // ****************************
 
-const NUM_COLUMS = 8;
+const NUM_COLUMNS = 8;
 const NUM_ROWS = 6;
 
-const slots = [];
+const slotsDOM = [];
+let state = {};
+
+function createEmptyGrid() {
+  return Array.from({ length: NUM_ROWS }, () => Array(NUM_COLUMNS).fill(0));
+}
+
+function resetState() {
+  state = {
+    grid: createEmptyGrid(),      // [row][col] => 0 or itemId
+    itemsById: new Map(),         // itemId => { id, rows, cols, color, x, y }
+    nextId: 1,
+  };
+}
 
 function draw(boardEl) {
 	for (let i = 0; i < NUM_ROWS; i++) {
-		slots.push([]);
+		slotsDOM.push([]);
 		let rowEl = document.createElement("div")
-		for (let j = 0; j < NUM_COLUMS; j++) {
+		for (let j = 0; j < NUM_COLUMNS; j++) {
 			let tileEl = document.createElement("div");
-			slots[i].push(tileEl);
+			slotsDOM[i].push(tileEl);
 			rowEl.appendChild(tileEl)
-		}	
-		
+		}			
 		boardEl.appendChild(rowEl)
 	}
+
+	resetState();
+	render();
+}
+
+function render() {
+  for (let r = 0; r < NUM_ROWS; r++) {
+    for (let c = 0; c < NUM_COLUMNS; c++) {
+      const cell = slotsDOM[r][c];
+      const id = state.grid[r][c];
+
+      if (id === 0) {
+        cell.style.backgroundColor = "white";
+      } else {
+        const item = state.itemsById.get(id);
+        cell.style.backgroundColor = item.color;
+      }
+    }
+  }
 }
 
 function drawItem(el, rows, cols, color) {
@@ -54,11 +85,8 @@ function generateHexColor() {
 }
 
 function generateItem() {
-	/*	this will add a range of 1 ... param / 2
-	*   to generante small itens semi-random width and heights
-	*/
 	const rows = Math.round((Math.random() * 100 % NUM_ROWS + 1) / 2);
-	const cols = Math.round((Math.random() * 100 % NUM_COLUMS + 1) / 2);
+	const cols = Math.round((Math.random() * 100 % NUM_COLUMNS + 1) / 2);
 	const color = generateHexColor()
 
 	return {
@@ -68,16 +96,54 @@ function generateItem() {
 
 function add(currItem) {
 	if(Object.keys(currItem).length === 0) { 
-		throw Error('no item found');
+		throw new Error('no item found');
 	}
 
-	/*	This will only add the begining of the inventory
-	*   change this to place wherever you need
-	*/
+	const pos = findFirstFit(state.grid, currItem);
 
-	for (let i = 0; i < currItem.rows; i++) {
-		for (let j = 0; j < currItem.cols; j++) {
-			slots[i][j].style.backgroundColor = `${currItem.color}`;
-		}	
-	}
+	if (!pos) return false;
+
+	const id = state.nextId++;
+	const placed = { id, ...currItem, x: pos.x, y: pos.y };
+
+	state.itemsById.set(id, placed);
+	place(state.grid, id, currItem, pos.x, pos.y);
+
+	render();
+	
+	return true;
+}
+
+// Baseline: top-left to bottom-right
+function findFirstFit(grid, item) {
+  for (let y = 0; y < NUM_ROWS; y++) {
+    for (let x = 0; x < NUM_COLUMNS; x++) {
+      if (canPlace(grid, item, x, y)) return { x, y };
+    }
+  }
+  return null;
+}
+
+function place(grid, itemId, item, x, y) {
+  for (let r = 0; r < item.rows; r++) {
+    for (let c = 0; c < item.cols; c++) {
+      grid[y + r][x + c] = itemId;
+    }
+  }
+}
+
+function canPlace(grid, item, x, y) {
+  // bounds
+  if (x < 0 || y < 0) return false;
+  if (x + item.cols > NUM_COLUMNS) return false;
+  if (y + item.rows > NUM_ROWS) return false;
+
+  // collisions
+  for (let r = 0; r < item.rows; r++) {
+    for (let c = 0; c < item.cols; c++) {
+      if (grid[y + r][x + c] !== 0) return false;
+    }
+  }
+
+  return true;
 }
