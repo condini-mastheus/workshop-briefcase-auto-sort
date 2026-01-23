@@ -23,6 +23,7 @@ function resetState() {
     grid: createEmptyGrid(),      // [row][col] => 0 or itemId
     itemsById: new Map(),         // itemId => { id, rows, cols, color, x, y }
     nextId: 1,
+		anchors: new Set(),
   };
 }
 
@@ -94,12 +95,20 @@ function generateItem() {
 	}
 }
 
+function calculateAnchors(pos, placedItem) {
+	const { y, x } = pos;
+	const { rows, cols } = placedItem;
+
+	state.anchors.add(`${x + cols},${y}`);
+	state.anchors.add(`${x},${y + rows}`);
+}
+
 function add(currItem) {
 	if(Object.keys(currItem).length === 0) { 
 		throw new Error('no item found');
 	}
 
-	const pos = findFirstFit(state.grid, currItem);
+	const pos = findFitByAnchors(state.grid, currItem);
 
 	if (!pos) return false;
 
@@ -108,9 +117,9 @@ function add(currItem) {
 
 	state.itemsById.set(id, placed);
 	place(state.grid, id, currItem, pos.x, pos.y);
+	calculateAnchors(pos, currItem);
 
 	render();
-	
 	return true;
 }
 
@@ -122,6 +131,25 @@ function findFirstFit(grid, item) {
     }
   }
   return null;
+}
+
+function findFitByAnchors(grid, item) {
+	if(state.anchors.size === 0) {
+		return { x: 0, y: 0 };
+	};
+
+	for (let anchor of state.anchors) {
+		const [x, y] = anchor.split(",");
+
+		const numberX = Number(x);
+		const numberY = Number(y);
+
+		if (canPlace(grid, item, numberX, numberY)) {
+			return { x: numberX, y: numberY };
+		}
+	}
+
+	return null;
 }
 
 function place(grid, itemId, item, x, y) {
